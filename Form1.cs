@@ -51,12 +51,16 @@ namespace CEFGame
          */
         public void UpdateWindowSettings()
         {
-            if(this.InvokeRequired)
+            // UI 컨트롤이 작업 쓰레드에서 돌고 있는가?
+            if (this.InvokeRequired)
             {
                 StringArgReturningVoidDelegate d = new StringArgReturningVoidDelegate(UpdateWindowSettings);
+                // UI 쓰레드에 작업 (다른 쓰레드에서 작업 불가, 엄격함)
                 this.Invoke(d);
             } else
             {
+                //UI 쓰레드인가?
+
                 // 창 제목을 변경합니다.
                 this.Text = rsTools.GetGameTitle();
                 Rectangle rect = rsTools.GetScreenSize();
@@ -66,6 +70,8 @@ namespace CEFGame
                 browser.SetBounds(0, 0, rect.Width, rect.Height);
                 // 창을 화면 중앙에 위치시킵니다.
                 this.CenterToScreen();
+                // 포커스를 획득합니다 (UI 쓰레드에서만 포커스 획득 가능)
+                rsTools.Focus();
             }
         }
 
@@ -108,7 +114,6 @@ namespace CEFGame
             };
 
             browser.Dock = DockStyle.Fill;
-            browser.Focus();
 
             this.Controls.Add(browser);
 

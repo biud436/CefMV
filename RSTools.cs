@@ -11,7 +11,7 @@ public class RSTools
 {
     private ChromiumWebBrowser browser;
     private CEFGame.Form1 _form;
-    private Thread _thread;
+    private Thread _workerThread;
 
     private string _windowTitle;
     private Rectangle _windowSize;
@@ -64,8 +64,21 @@ public class RSTools
 
     public void UpdateWindowSettings()
     {
-        _thread = new Thread(new ThreadStart(_form.UpdateWindowSettings));
-        _thread.Start();
+        _workerThread = new Thread(new ThreadStart(_form.UpdateWindowSettings));
+        _workerThread.Start();
+    }
+
+    public void Focus()
+    {
+        // 작업 쓰레드인가?
+        if(browser.InvokeRequired)
+        {
+            // UI 쓰레드로 포커스 작업 요청
+            browser.BeginInvoke(new Action(() => browser.Focus()));
+        } else
+        {
+            browser.Focus();
+        }
     }
 
 }
