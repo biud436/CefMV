@@ -373,51 +373,6 @@
     <Content Include="www\js\plugins\Community_Basic.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="www\js\plugins\RS_ArabicMessageSystem.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\RS_DeleteNextRequiredExp.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\RS_HUD_4m.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\RS_HUD_4m_InBattle.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\RS_HUD_OptimizedMobile.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\RS_ScreenManager.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\RS_ViewportCulling.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\RS_WaveFilter.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\RS_Window_KoreanNameInput.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\RunAsCanvasModeInMali-400.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\WindowIdentifier.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\YEP_AddOn_ItemCore_ItemStatus.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\YEP_CoreEngine.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\YEP_ItemCore.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="www\js\plugins\YEP_QuestJournal.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="www\js\rpg_core.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
