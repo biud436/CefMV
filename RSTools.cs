@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Drawing;
+using System.IO;
 
 public class RSTools
 {
@@ -15,6 +16,18 @@ public class RSTools
 
     private string _windowTitle;
     private Rectangle _windowSize;
+
+    public string WindowTitle
+    {
+        get { return _windowTitle;  }
+        set { _windowTitle = value; }
+    }
+
+    public Rectangle WindowSize
+    {
+        get { return _windowSize; }
+        set { _windowSize = value;  }
+    }
 
     public RSTools(ChromiumWebBrowser mainBrowser, CEFGame.Form1 form)
     {

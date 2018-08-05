@@ -83,6 +83,12 @@ namespace CEFGame
             return AppDomain.CurrentDomain.BaseDirectory;
         }
 
+        public static string GetCurrentDirectory()
+        {
+            string currentDirName = System.IO.Directory.GetCurrentDirectory();
+            return currentDirName;
+        }
+
         /**
          * 브라우저를 초기화 합니다.
          */
@@ -133,7 +139,7 @@ namespace CEFGame
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        {
+        {s
             this.SetBounds(0, 0, 816 + 16, 624 + 32);
             this.CenterToScreen();
         }
