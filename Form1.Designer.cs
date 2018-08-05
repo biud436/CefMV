@@ -34,9 +34,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(781, 369);
             this.Name = "Form1";
-            this.Text = "C# 임베디드 크로미움 웹뷰 테스트";
+            this.Text = "Test - C# Chromium Embedded Framework for RPG Maker MV";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
