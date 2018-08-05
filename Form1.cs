@@ -20,8 +20,6 @@ namespace CEFGame
     public partial class Form1 : Form
     {
 
-        private string m_gameTitle;
-        private Rectangle m_screenSize;
         public ChromiumWebBrowser browser;
         public RSTools rsTools;
         delegate void StringArgReturningVoidDelegate();
@@ -36,14 +34,16 @@ namespace CEFGame
         {
             Task task = new Task(() => {
                 // 창 제목을 가져옵니다.
-                object js = EvaluateScript(browser, "document.head.getElementsByTagName('title')[0].innerText;");
+                object windowTitle = EvaluateScript(browser, "document.head.getElementsByTagName('title')[0].innerText;");
                 // 창의 폭과 높이를 가져옵니다.
                 object boxWidth = EvaluateScript(browser, "Graphics.boxWidth;");
                 object boxHeight = EvaluateScript(browser, "Graphics.boxHeight;");
-                m_gameTitle = js.ToString();
-                m_screenSize = new Rectangle(0, 0, Int32.Parse(boxWidth.ToString()), Int32.Parse(boxHeight.ToString()));
+                rsTools.SetGameTitle(windowTitle.ToString());
+                rsTools.SetScreenSize(Int32.Parse(boxWidth.ToString()), Int32.Parse(boxHeight.ToString()));
+
             });
             task.Start();
+            
         }
 
         /**
@@ -58,11 +58,12 @@ namespace CEFGame
             } else
             {
                 // 창 제목을 변경합니다.
-                this.Text = m_gameTitle;
+                this.Text = rsTools.GetGameTitle();
+                Rectangle rect = rsTools.GetScreenSize();
                 // 창 넓이를 변경합니다.
-                this.SetBounds(0, 0, m_screenSize.Width + 16, m_screenSize.Height + 32);
+                this.SetBounds(0, 0, rect.Width + 16, rect.Height + 32);
                 // 브라우저의 넓이를 변경합니다.
-                browser.SetBounds(0, 0, m_screenSize.Width, m_screenSize.Height);
+                browser.SetBounds(0, 0, rect.Width, rect.Height);
                 // 창을 화면 중앙에 위치시킵니다.
                 this.CenterToScreen();
             }
@@ -81,8 +82,6 @@ namespace CEFGame
          */
         public void InitBrowser()
         {
-            m_gameTitle = "";
-
             CefSettings setttings = new CefSettings();
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
             Cef.Initialize(setttings);
@@ -101,7 +100,7 @@ namespace CEFGame
             // RSTools로 접근할 수 있습니다(camelCase로 변경됩니다)
             rsTools = new RSTools(browser, this);
             browser.JavascriptObjectRepository.Register("RSTools", rsTools, false);
-
+            browser.SetBounds(0, 0, 800, 600);
             browser.BrowserSettings = browserSettings;
             browser.FrameLoadEnd += delegate
             {
@@ -109,6 +108,7 @@ namespace CEFGame
             };
 
             browser.Dock = DockStyle.Fill;
+            browser.Focus();
 
             this.Controls.Add(browser);
 
@@ -129,7 +129,8 @@ namespace CEFGame
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            this.SetBounds(0, 0, 816 + 16, 624 + 32);
+            this.CenterToScreen();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
