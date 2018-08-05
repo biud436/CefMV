@@ -134,4 +134,11 @@
             window.resizeBy(dw, dh);
         }
     };
+
+    var alias_Scene_Title_start = Scene_Title.prototype.start;
+    Scene_Title.prototype.start = function () {
+        alias_Scene_Title_start.call(this);
+        if (RSTools) RSTools.updateWindowSettings();
+    };
+
 })();
