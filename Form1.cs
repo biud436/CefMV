@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CefSharp;
 using CefSharp.WinForms;
+using NAudio.Wave;
+using NAudio.Vorbis;
+using System.Threading;
 
 namespace CEFGame
 {
-    /**
-     * 필수 : 로컬 파일 접근
-     * https://stackoverflow.com/questions/49745199/why-cefsharp-indicates-not-allowed-to-load-local-resource-file-c 
-     * https://www.codeproject.com/Articles/990346/Using-HTML-as-UI-Elements-in-a-WinForms-Applicatio
-     */
     public partial class Form1 : Form
     {
 
         public ChromiumWebBrowser browser;
         public RSTools rsTools;
         delegate void StringArgReturningVoidDelegate();
+
+        private SoundManager _soundManager = null;
 
         public Form1()
         {
@@ -46,9 +46,6 @@ namespace CEFGame
             
         }
 
-        /**
-         * https://docs.microsoft.com/ko-kr/dotnet/framework/winforms/controls/how-to-make-thread-safe-calls-to-windows-forms-controls
-         */
         public void UpdateWindowSettings()
         {
             // UI 컨트롤이 작업 쓰레드에서 돌고 있는가?
@@ -72,6 +69,10 @@ namespace CEFGame
                 this.CenterToScreen();
                 // 포커스를 획득합니다 (UI 쓰레드에서만 포커스 획득 가능)
                 rsTools.Focus();
+
+                // 오디오 파일을 재생합니다.
+                _soundManager.Load(string.Format(@"{0}www\audio\bgm\deepnight.ogg", GetAppLocation()), "m", SoundManager.SoundType.MUSIC);
+                _soundManager.PlayMusic("m", false);
             }
         }
 
@@ -111,12 +112,15 @@ namespace CEFGame
             // C# API 호출을 위한 자바스크립트 객체를 만듭니다.
             // RSTools로 접근할 수 있습니다(camelCase로 변경됩니다)
             rsTools = new RSTools(browser, this);
+            _soundManager = new SoundManager();
             browser.JavascriptObjectRepository.Register("RSTools", rsTools, false);
+            browser.JavascriptObjectRepository.Register("RSAudio", _soundManager, false);
             browser.SetBounds(0, 0, 800, 600);
             browser.BrowserSettings = browserSettings;
             browser.FrameLoadEnd += delegate
             {
                 ChangeWindowSettings();
+                browser.ShowDevTools();
             };
 
             browser.Dock = DockStyle.Fill;
@@ -139,13 +143,14 @@ namespace CEFGame
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        {s
+        {
             this.SetBounds(0, 0, 816 + 16, 624 + 32);
             this.CenterToScreen();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            _soundManager.Dispose();   
             Cef.Shutdown();
         }
 
