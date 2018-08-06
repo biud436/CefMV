@@ -35,7 +35,24 @@ class SoundManager
         soundPlayer = new NAudio.Wave.WaveOut();
     }
 
-    public bool Load(string fileName, string id, SoundType type)
+    public static string GetAppLocation()
+    {
+        return AppDomain.CurrentDomain.BaseDirectory;
+    }
+
+    public bool LoadMusic(string fileName, string id)
+    {
+        string path = string.Format(@"{0}www\audio\bgm\{1}", GetAppLocation(), fileName);
+        return Load(path, id, SoundType.MUSIC);
+    }
+
+    public bool LoadSound(string fileName, string id)
+    {
+        string path = string.Format(@"{0}www\audio\se\{1}", GetAppLocation(), fileName);
+        return Load(path, id, SoundType.SOUND);
+    }
+
+    private bool Load(string fileName, string id, SoundType type)
     {
 
         if(type == SoundType.MUSIC)
@@ -63,7 +80,7 @@ class SoundManager
 
     }
 
-    public void PlayMusic(string id, bool isLooping)
+    public void PlayMusic(string id)
     {
         NAudio.Vorbis.VorbisWaveReader data = _musicMap[id];
         if (data != null)
@@ -71,10 +88,10 @@ class SoundManager
             musicPlayer.Init(data);
             musicPlayer.Play();
         }
-}
+    }
 
 
-    public void PlaySound(string id, bool isLooping)
+    public void PlaySound(string id)
     {
         NAudio.Vorbis.VorbisWaveReader data = _soundMap[id];
         if (data != null)
@@ -112,7 +129,7 @@ class SoundManager
     {
         
         // 0.0 ~ 1.0 사이로 값을 조정합니다.
-        f = f / 100.0f;
+        f = f * 0.01f;
 
         if(f < 0f)
         {
