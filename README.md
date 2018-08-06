@@ -17,7 +17,7 @@ RSAudio.setMusicVolume(f);
 RSAudio.dispose();
 ```
 
-If the NAudio initialization was successful, you can be using the following functions.
+If the NAudio initialization was successful, you can be using the following functions (This is an Audio subsystem.)
 
 ```javascript
 // load the sound file called 'deepnight.ogg' from audio/bgm/ folder.
@@ -28,7 +28,7 @@ RSAudio.playMusic("BGM");
 RSAudio.setMusicVolume(50.0); 
 ```
 
-To set the display resolution, you can now these functions instead of NwJs. But this function does not do much at the moment. This is just simple functions.
+To set the display resolution, you can now these functions instead of NwJs. But this function does not do much at the moment. This is just test functions.
 
 ```javascript
 RSTools.showMessageBox(title, content, yesCallback, noCallback);
