@@ -61,10 +61,11 @@ namespace CEFGame
                 // 창 제목을 변경합니다.
                 this.Text = rsTools.GetGameTitle();
                 Rectangle rect = rsTools.GetScreenSize();
-                // 창 넓이를 변경합니다.
-                this.SetBounds(0, 0, rect.Width + 16, rect.Height + 32);
-                // 브라우저의 넓이를 변경합니다.
-                browser.SetBounds(0, 0, rect.Width, rect.Height);
+
+                // 클라이언트 영역 크기를 조정합니다 (스크롤바가 생기는 문제를 제거할 수 있다)
+                this.ClientSize = new Size(rect.Width, rect.Height);
+                browser.ClientSize = new Size(rect.Width, rect.Height);
+
                 // 창을 화면 중앙에 위치시킵니다.
                 this.CenterToScreen();
                 // 포커스를 획득합니다 (UI 쓰레드에서만 포커스 획득 가능)
@@ -115,7 +116,7 @@ namespace CEFGame
             _soundManager = new SoundManager();
             browser.JavascriptObjectRepository.Register("RSTools", rsTools, false);
             browser.JavascriptObjectRepository.Register("RSAudio", _soundManager, false);
-            browser.SetBounds(0, 0, 800, 600);
+            browser.ClientSize = new Size(816, 624);
             browser.BrowserSettings = browserSettings;
             browser.FrameLoadEnd += delegate
             {
@@ -144,7 +145,7 @@ namespace CEFGame
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.SetBounds(0, 0, 816 + 16, 624 + 32);
+            this.ClientSize = new Size(816, 624);
             this.CenterToScreen();
         }
 
