@@ -12,6 +12,7 @@ using CefSharp.WinForms;
 using NAudio.Wave;
 using NAudio.Vorbis;
 using System.Threading;
+using System.Globalization;
 
 namespace CEFGame
 {
@@ -97,6 +98,8 @@ namespace CEFGame
         public void InitBrowser()
         {
             CefSettings setttings = new CefSettings();
+            setttings.Locale = GetLanguageCode();
+
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
             Cef.Initialize(setttings);
 
@@ -136,6 +139,11 @@ namespace CEFGame
             task.Wait();
             JavascriptResponse response = task.Result;
             return response.Success ? (response.Result ?? "") : response.Message;
+        }
+
+        public string GetLanguageCode()
+        {
+            return CultureInfo.CurrentCulture.Name;
         }
 
         private void Browser_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
