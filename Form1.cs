@@ -34,11 +34,12 @@ namespace CEFGame
         public void ChangeWindowSettings()
         {
             Task task = new Task(() => {
-                // 창 제목을 가져옵니다.
+                // Get the window title from the RPG Maker MV
                 object windowTitle = EvaluateScript(browser, "document.head.getElementsByTagName('title')[0].innerText;");
-                // 창의 폭과 높이를 가져옵니다.
+                // Get the width and height values from the Graphics object.
                 object boxWidth = EvaluateScript(browser, "Graphics.boxWidth;");
                 object boxHeight = EvaluateScript(browser, "Graphics.boxHeight;");
+                // Set the game title and screen size in Cef.
                 rsTools.SetGameTitle(windowTitle.ToString());
                 rsTools.SetScreenSize(Int32.Parse(boxWidth.ToString()), Int32.Parse(boxHeight.ToString()));
 
@@ -49,37 +50,39 @@ namespace CEFGame
 
         public void UpdateWindowSettings()
         {
-            // UI 컨트롤이 작업 쓰레드에서 돌고 있는가?
+            // Is it the worker thread?
             if (this.InvokeRequired)
             {
                 StringArgReturningVoidDelegate d = new StringArgReturningVoidDelegate(UpdateWindowSettings);
-                // UI 쓰레드에 작업 (다른 쓰레드에서 작업 불가, 엄격함)
+                // Request the UI thread.
                 this.Invoke(d);
             } else
             {
-                //UI 쓰레드인가?
+                //Is it the UI thread?
 
-                // 창 제목을 변경합니다.
+                // Change the window name.
                 this.Text = rsTools.GetGameTitle();
                 Rectangle rect = rsTools.GetScreenSize();
 
-                // 클라이언트 영역 크기를 조정합니다 (스크롤바가 생기는 문제를 제거할 수 있다)
+                // Adjust the client area. (for removing the scrollbar)
                 this.ClientSize = new Size(rect.Width, rect.Height);
                 browser.ClientSize = new Size(rect.Width, rect.Height);
 
-                // 창을 화면 중앙에 위치시킵니다.
+                // Set the window position in the display.
                 this.CenterToScreen();
-                // 포커스를 획득합니다 (UI 쓰레드에서만 포커스 획득 가능)
+                // The focus can get only in an UI thread, not worker thread (it's very strict.)
                 rsTools.Focus();
 
-                // 오디오 파일을 재생합니다.
-                //_soundManager.LoadMusic("deepnight.ogg", "BGM");
-                //_soundManager.PlayMusic("BGM");
+                // Check the platform.
+                EvaluateScript(browser, @"Utils.isCef = function() { 
+                    return true; 
+                };");
+
             }
         }
 
         /**
-         * 로컬 폴더 경로를 획득합니다.
+         * Get the path of the local folder
          */
         public static string GetAppLocation()
         {
@@ -93,7 +96,7 @@ namespace CEFGame
         }
 
         /**
-         * 브라우저를 초기화 합니다.
+         * Initialize the browser.
          */
         public void InitBrowser()
         {
@@ -103,18 +106,18 @@ namespace CEFGame
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
             Cef.Initialize(setttings);
 
-            // 로컬 파일에 접근 가능하게 설정합니다.
+            // Set the authority to access local files.
             var browserSettings = new BrowserSettings
             {
                 FileAccessFromFileUrls = CefState.Enabled,
                 UniversalAccessFromFileUrls = CefState.Enabled
             };
 
-            // 브라우저를 생성합니다.
+            // Create the browser object.
             browser = new ChromiumWebBrowser(string.Format("file:///{0}www/index.html", GetAppLocation()));
 
-            // C# API 호출을 위한 자바스크립트 객체를 만듭니다.
-            // RSTools로 접근할 수 있습니다(camelCase로 변경됩니다)
+            // Create a new javascript object that can call the C# API.
+            // We should access the object called 'RSTools' (Changed camelCase)
             rsTools = new RSTools(browser, this);
             _soundManager = new SoundManager();
             browser.JavascriptObjectRepository.Register("RSTools", rsTools, false);

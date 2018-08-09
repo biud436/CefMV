@@ -15,7 +15,7 @@ class SoundManager
     private Dictionary<string, NAudio.Vorbis.VorbisWaveReader> _musicMap = null;
     private Dictionary<string, NAudio.Vorbis.VorbisWaveReader> _soundMap = null;
 
-    // DirectSoundOut은 볼륨 조절이 불가능하므로, WaveOut으로 교체
+    // The DirectSoundOut couldn't control the sound volume, So I'd changed as the WaveOut.
     private NAudio.Wave.WaveOut musicPlayer = null;
     private NAudio.Wave.WaveOut soundPlayer = null;
 
@@ -128,7 +128,6 @@ class SoundManager
     public float SetMusicVolume(float f)
     {
         
-        // 0.0 ~ 1.0 사이로 값을 조정합니다.
         f = f * 0.01f;
 
         if(f < 0f)

@@ -83,10 +83,10 @@ public class RSTools
 
     public void Focus()
     {
-        // 작업 쓰레드인가?
+        // Worker thread?
         if(browser.InvokeRequired)
         {
-            // UI 쓰레드로 포커스 작업 요청
+            // Request the UI thread.
             browser.BeginInvoke(new Action(() => browser.Focus()));
         } else
         {
