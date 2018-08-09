@@ -73,8 +73,8 @@ namespace CEFGame
                 rsTools.Focus();
 
                 // 오디오 파일을 재생합니다.
-                _soundManager.LoadMusic("deepnight.ogg", "BGM");
-                _soundManager.PlayMusic("BGM");
+                //_soundManager.LoadMusic("deepnight.ogg", "BGM");
+                //_soundManager.PlayMusic("BGM");
             }
         }
 
