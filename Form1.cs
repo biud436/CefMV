@@ -100,21 +100,29 @@ namespace CEFGame
          */
         public void InitBrowser()
         {
-            CefSettings setttings = new CefSettings();
-            setttings.Locale = GetLanguageCode();
+            CefSettings settings = new CefSettings();
+            settings.Locale = GetLanguageCode();
+            settings.MultiThreadedMessageLoop = true;
+            settings.RemoteDebuggingPort = 8080;
+            //settings.CefCommandLineArgs.Add("remote-debugging-port", "8080");
+
+            Cef.EnableHighDPISupport();
 
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
-            Cef.Initialize(setttings);
+            Cef.Initialize(settings);
 
             // Set the authority to access local files.
             var browserSettings = new BrowserSettings
             {
                 FileAccessFromFileUrls = CefState.Enabled,
-                UniversalAccessFromFileUrls = CefState.Enabled
+                UniversalAccessFromFileUrls = CefState.Enabled,
+                DefaultEncoding = "UTF-8",
             };
 
             // Create the browser object.
             browser = new ChromiumWebBrowser(string.Format("file:///{0}www/index.html", GetAppLocation()));
+
+            //browser.JsDialogHandler = new JsDialogHandler();
 
             // Create a new javascript object that can call the C# API.
             // We should access the object called 'RSTools' (Changed camelCase)
@@ -124,10 +132,18 @@ namespace CEFGame
             browser.JavascriptObjectRepository.Register("RSAudio", _soundManager, false);
             browser.ClientSize = new Size(816, 624);
             browser.BrowserSettings = browserSettings;
-            browser.FrameLoadEnd += delegate
+            browser.FrameLoadEnd += (sender, args) =>
             {
-                ChangeWindowSettings();
-                browser.ShowDevTools();
+                if (args.Frame.IsMain)
+                {
+                    ChangeWindowSettings();
+                    DialogResult ret = MessageBox.Show("Open Developer Tools?", "Help", MessageBoxButtons.OKCancel);
+                    if(ret == DialogResult.OK)
+                    {
+                        browser.ShowDevTools();
+                    }
+                    browser.GetMainFrame().ExecuteJavaScriptAsync("alert('CefMV has initialized')");
+                }
             };
 
             browser.Dock = DockStyle.Fill;
@@ -163,7 +179,6 @@ namespace CEFGame
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             _soundManager.Dispose();   
-            Cef.Shutdown();
         }
 
     }
